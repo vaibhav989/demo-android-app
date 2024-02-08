@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Pay',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 24, 
                   ),

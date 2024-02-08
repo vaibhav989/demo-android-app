@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:task1/screen/privacy.dart';
-import 'package:task1/screen/terms.dart';
+import 'package:task1/screen/privacy.dart'; // Ensure this path is correct
+import 'package:task1/screen/terms.dart'; // Ensure this path is correct
 
-class SecondScreen extends StatelessWidget {
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: SecondScreen(),
+    );
+  }
+}
+
+class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
+
+  @override
+  State<SecondScreen> createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  String mobileNumber = '';
+  bool isNumberValid = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +35,7 @@ class SecondScreen extends StatelessWidget {
           'Employer',
           style: TextStyle(fontSize: 16),
         ),
-        centerTitle: true, 
+        centerTitle: true,
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -22,7 +44,7 @@ class SecondScreen extends StatelessWidget {
               constraints: BoxConstraints(
                 minHeight: viewportConstraints.maxHeight,
               ),
-              child: IntrinsicHeight( 
+              child: IntrinsicHeight(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -31,27 +53,33 @@ class SecondScreen extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       radius: 30,
                       child: ClipOval(
-                        child: Image.asset("assets/images/tankhapay_logo.jpg"),
+                        child: Image.asset("assets/images/tankhapay_logo.jpg"), // Ensure you have this asset
                       ),
                     ),
                     const SizedBox(height: 15),
-                    const Text(
-                      'TankhaPay',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Tankha',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        Text(
+                          'Pay',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 70),
-                    const IntlPhoneField(
-                      decoration: InputDecoration(
-                        labelText: "Mobile Number",
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                      ),
-                    ),
+                    mobileNumberWidget(context),
                     const SizedBox(height: 30),
                     termsAndPrivacyPolicy(context),
                     const SizedBox(height: 20),
@@ -61,6 +89,29 @@ class SecondScreen extends StatelessWidget {
               ),
             ),
           );
+        },
+      ),
+    );
+  }
+
+  Widget mobileNumberWidget(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 40,
+      child: IntlPhoneField(
+        decoration: InputDecoration(
+          labelText: "Mobile Number",
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        keyboardType: TextInputType.phone,
+        initialCountryCode: 'IN', 
+        onChanged: (phone) {
+          setState(() {
+            mobileNumber = phone.number;
+            isNumberValid = phone.number.length == 10;
+          });
         },
       ),
     );
@@ -78,7 +129,10 @@ class SecondScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsAndConditions())),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TermsAndConditions()),
+              ),
               child: const Text(
                 'Terms and Conditions',
                 style: TextStyle(fontSize: 15, color: Colors.blue),
@@ -89,7 +143,10 @@ class SecondScreen extends StatelessWidget {
               style: TextStyle(fontSize: 12),
             ),
             GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Privacy())),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Privacy()),
+              ),
               child: const Text(
                 'Privacy Policy',
                 style: TextStyle(fontSize: 15, color: Colors.blue),
@@ -105,10 +162,10 @@ class SecondScreen extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: isNumberValid ? () {} : null,
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: Colors.blue,
+          backgroundColor: isNumberValid ? Colors.blue : Colors.grey,
         ),
         child: const Text('Send Code'),
       ),
