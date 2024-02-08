@@ -8,8 +8,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       home: const HomeScreen(),
-      theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
     );
 
   }
